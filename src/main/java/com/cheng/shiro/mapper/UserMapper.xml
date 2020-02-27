@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cheng.shiro.mapper.UserMapper">
+	<select id="queryUserByName" resultType="user" parameterType="string">
+        select id,name,pass from user where name = #{value}
+    </select>
+
+    <select id="queryUserById" resultType="user" parameterType="Integer">
+        select id,name,pass,perms from user where id = #{value}
+    </select>
+</mapper>

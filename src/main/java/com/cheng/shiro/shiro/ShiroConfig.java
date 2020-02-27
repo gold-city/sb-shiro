@@ -1,5 +1,6 @@
 package com.cheng.shiro.shiro;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +44,26 @@ public class ShiroConfig {
         * */
 
         Map<String,String> filterMap=new LinkedHashMap<String, String>();
+        //处理testcontroller下不需要拦截的接口,放在全部拦截接口的前面
+        filterMap.put("/testController/login","anon");
+        filterMap.put("/testController/index","anon");
+
+        //设置授权过滤器--为添加用户进行授权
+        filterMap.put("/testController/add","perms[user:add]");//可自定义授权数组
+        filterMap.put("/testController/update","perms[user:update]");//可自定义授权数组
+
+
         /*filterMap.put("/testController/add","authc");//使用authc拦截/add请求，进行权限认证
         filterMap.put("/testController/update","authc");*/
         //使用通配符设定目录下拦截
         filterMap.put("/testController/*","authc");//拦截testcontroller接口下的全部接口
-        //处理testcontroller下不需要拦截的接口
-        filterMap.put("/testController/toLogin","anon");
+
 
         //设置跳转的登录页面
         shiroFilterFactoryBean.setLoginUrl("/testController/toLogin");
+
+        //设置未授权的提示页面
+        shiroFilterFactoryBean.setUnauthorizedUrl("/testController/uoAuth");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
         return shiroFilterFactoryBean;
@@ -78,4 +90,13 @@ public class ShiroConfig {
     public MyRealm getMyRealm(){//这里通过注解注入bean，该注解的id为方法名getMyRealm(返回值的小写开头)
         return new MyRealm();
     }
+
+    /**
+     * 配置ShiroDialect，用于thymeleaf和shiro标签配合使用
+     */
+    @Bean
+    public ShiroDialect getShiroDialect(){
+        return new ShiroDialect();
+    }
+
 }

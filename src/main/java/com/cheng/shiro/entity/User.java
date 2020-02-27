@@ -1,5 +1,7 @@
 package com.cheng.shiro.entity;
 
+import lombok.Data;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Cheng
@@ -9,5 +11,10 @@ package com.cheng.shiro.entity;
  *
  *
  */
-public class Student {
+@Data
+public class User {
+    private Integer id;
+    private String name;
+    private String pass;
+    private String perms;
 }
